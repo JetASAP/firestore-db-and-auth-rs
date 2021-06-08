@@ -96,8 +96,15 @@ where
     let firebase_document = pod_to_document(&document)?;
 
     if options.merge && firebase_document.fields.is_some() {
-        let fields = firebase_document.fields.as_ref().unwrap().keys().join(",");
-        url = format!("{}?currentDocument.exists=true&updateMask.fieldPaths={}", url, fields);
+        let fields = firebase_document
+            .fields
+            .as_ref()
+            .unwrap()
+            .keys()
+            .map(|k| "updateMask.fieldPaths=".to_string() + k)
+            .collect::<Vec<_>>()
+            .join("&");
+        url = format!("{}?currentDocument.exists=true&{}", url, fields);
     }
 
     let builder = if document_id.is_some() {
