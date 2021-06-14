@@ -414,7 +414,7 @@ pub mod service_account {
 
             if jwt_update_expiry_if(&mut jwt, 50) {
                 if let Some(secret) = self.credentials.keys.secret.as_ref() {
-                    if let Ok(v) = self.jwt.borrow().encode(&secret.deref()) {
+                    if let Ok(v) = jwt.encode(&secret.deref()) {
                         if let Ok(v2) = v.encoded() {
                             self.access_token_.swap(&RefCell::new(v2.encode()));
                         }
