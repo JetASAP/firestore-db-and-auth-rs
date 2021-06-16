@@ -26,7 +26,6 @@ pub struct WriteOptions {
 /// If no document_id is given, Firestore will generate an ID. Check the [`WriteResult`] return value.
 ///
 /// If a document_id is given, the document will be created if it does not yet exist.
-/// Except if the "merge" option (see [`WriteOptions::merge`]) is set.
 ///
 /// Example:
 ///```no_run
@@ -104,7 +103,7 @@ where
             .map(|k| "updateMask.fieldPaths=".to_string() + k)
             .collect::<Vec<_>>()
             .join("&");
-        url = format!("{}?currentDocument.exists=true&{}", url, fields);
+        url = format!("{}?{}", url, fields);
     }
 
     let builder = if document_id.is_some() {
